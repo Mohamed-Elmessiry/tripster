@@ -1,0 +1,57 @@
+body {
+  background-color: orange;
+}
+
+.tripster-header {
+  font-family: anton, sans-serif;
+  font-size: 36px;
+  color: white;
+  text-align: center;
+}
+
+button {
+  font-family: anton, sans-serif;
+  color: #4b4b4b;
+}
+
+.buttons-holder {
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header {
+  background-color: #62605c;
+  height: 40px;
+}
+
+.main-page {
+  font-family: anton, sans-serif;
+  color: white;
+  font-size: 14px;
+  background-color: #62605c;
+  border: none;
+}
+
+.favorites {
+  font-family: anton, sans-serif;
+  color: white;
+  font-size: 14px;
+  background-color: #62605c;
+  border: none;
+}
+
+input {
+  width: 300px;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.venue-card {
+  display: flex;
+}
