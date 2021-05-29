@@ -45,7 +45,7 @@ class App extends React.Component {
         console.log(data);
         // eslint-disable-next-line no-console
 
-        this.setState({ venues: this.formatData(data) });
+        this.setState({ venues: data });
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -56,32 +56,48 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="header">
+      <div className={this.state.venues.length > 0 ? 'App-white' : 'App'}>
+        <div className={this.state.venues.length > 0 ? 'header-orange' : 'header'}>
           <div className="buttons-holder">
             <button className="main-page">Main Page</button>
             <button className="favorites">Favorites</button>
           </div>
 
         </div>
-        <h1 className= "tripster-header">Tripster</h1>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" value={this.state.searchtext} name="searchtext" placeholder="City" onChange={this.handlechange} />
-          <input type="text" value={this.state.activity} name="activity" placeholder="Acitivity" onChange={this.handlechange} />
-          <button type="submit">Search</button>
-        </form>
-        {
-          this.state.venues.map((venue, i) => (
-            <div className="venue-card" key={`venue-${i}`}>
-              <img src={`${venue.prefix}.png`} alt="location image"/>
-              <div>
-                <h3>{venue.name}</h3>
-                <p>{venue.pluralName}</p>
-                <p>{venue.address}</p>
+        {this.state.venues.length > 0
+          ? (
+          <>
+          <h1>Results</h1>
+          <section>
+
+          {
+            this.state.venues.map((venue, i) => (
+              <div className="venue-card" key={`venue-${i}`}>
+                <img src={`${venue.prefix}64.png`} alt="location image" />
+                <div>
+                  <span>{venue.prefix}.png</span>
+                  <h3 className="venue-names">{venue.name}</h3>
+                  <p className="venue-category">{venue.pluralName}</p>
+                  <p className="venue-address">{venue.address}</p>
+                </div>
               </div>
-            </div>
-          ))
-        }
+            ))
+          }
+              </section>
+          </>
+            )
+          : (
+          <>
+              <h1 className="tripster-header">Tripster</h1>
+              <form onSubmit={this.handleSubmit}>
+                <input className="city-input" type="text" value={this.state.searchtext} name="searchtext" placeholder="City" onChange={this.handlechange} />
+                <input className="activity-input" type="text" value={this.state.activity} name="activity" placeholder="Activity" onChange={this.handlechange} />
+                <button className="search" type="submit">Search</button>
+              </form>
+
+          </>
+            )}
+
       </div>
     );
   }
