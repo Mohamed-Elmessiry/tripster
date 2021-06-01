@@ -1,4 +1,3 @@
-/* eslint-disable multiline-ternary */
 
 import React, { useEffect, useState } from 'react';
 
@@ -7,40 +6,34 @@ const App = () => {
   const [searchText, setSearchText] = useState('');
   const [searchCity, setSearchCity] = useState('');
   const [imageLinks, setImageLinks] = useState([]);
-  const baseUrl = 'http://localhost:3001';
 
   useEffect(() => {
     // eslint-disable-next-line array-callback-return
-    venues.map((venue, i) => {
+    venues.forEach((venue, i) => {
 
       if (i > 1) return null;
 
-      fetch(`${baseUrl}/api/venue/image/${venue.id}`)
+      fetch(`/api/venue/image/${venue.id}`)
         .then(data => data.json())
         .then(res => {
-          imageLinks.push({ id: venue.id, url: res.imgUrl });
+          const newImageLinks = imageLinks.concat({ id: venue.id, url: res.imgUrl });
 
-          const copiedImageLinks = JSON.parse(JSON.stringify(imageLinks));
-
-          setImageLinks(copiedImageLinks);
+          setImageLinks(newImageLinks);
         });
     });
   }, [venues]);
 
   const handleSubmit = e => {
     event.preventDefault();
-    const api = `${baseUrl}/api/venues/${searchCity}/${searchText}`;
+    const api = `/api/venues/${searchCity}/${searchText}`;
     fetch(api)
       .then(res => {
         return res.json();
       })
       .then(venues => {
         setVenues(venues);
-      })
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.log('error', error);
       });
+    console.error();
   };
 
   const mainPageClicked = e => {
@@ -49,7 +42,7 @@ const App = () => {
   };
 
   return (
-    <div className={venues.length > 0 ? 'App-white' : 'App'}>
+    <div className={venues.length > 0 ? 'app-white' : 'app'}>
       <div className={venues.length > 0 ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
           <button className={venues.length === 0 ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
@@ -88,7 +81,8 @@ const App = () => {
               }
             </section>
           </>
-          ) : (
+          )
+        : (
           <>
             <h1 className="tripster-header">Tripster</h1>
             <form onSubmit={handleSubmit}>
