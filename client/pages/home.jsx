@@ -1,107 +1,120 @@
+/* eslint-disable multiline-ternary */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { searchtext: '', venues: [], activity: '' };
-    this.text = '';
-    this.handlechange = this.handlechange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const App = () => {
+  const [venues, setVenues] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchCity, setSearchCity] = useState('');
+  const [imageLinks, setImageLinks] = useState([]);
+  const baseUrl = 'http://localhost:3001';
 
-  handlechange(event) {
-    const value = event.target.value;
-    const name = event.target.name;
-    this.setState({ [name]: value });
+  useEffect(() => {
+    // eslint-disable-next-line array-callback-return
+    venues.map((venue, i) => {
 
-  }
+      if (i > 1) return null;
 
-  formatData(venues) {
-    return venues.map(({ location, name, categories }) => {
-      const { address } = location;
-      const { pluralName, icon: { prefix } } = categories[0];
-      return {
-        address,
-        name,
-        prefix,
-        pluralName
-      };
+      fetch(`${baseUrl}/api/venue/image/${venue.id}`)
+        .then(data => data.json())
+        .then(res => {
+          imageLinks.push({ id: venue.id, url: res.imgUrl });
+
+          const copiedImageLinks = JSON.parse(JSON.stringify(imageLinks));
+
+          setImageLinks(copiedImageLinks);
+        });
     });
-  }
+  }, [venues]);
 
-  handleSubmit(event) {
+  const handleSubmit = e => {
     event.preventDefault();
-    const activity = this.state.activity;
-    const location = this.state.searchtext;
-    const api = `http://localhost:3001/api/venues/${location}/${activity}`;
+    const api = `${baseUrl}/api/venues/${searchCity}/${searchText}`;
     fetch(api)
       .then(res => {
         return res.json();
       })
-      .then(data => {
-        // eslint-disable-next-line no-debugger
-        // eslint-disable-next-line no-console
-        console.log(data);
-        // eslint-disable-next-line no-console
-
-        this.setState({ venues: data });
+      .then(venues => {
+        setVenues(venues);
       })
       .catch(error => {
         // eslint-disable-next-line no-console
         console.log('error', error);
-
       });
-  }
+  };
 
-  render() {
-    return (
-      <div className={this.state.venues.length > 0 ? 'App-white' : 'App'}>
-        <div className={this.state.venues.length > 0 ? 'header-orange' : 'header'}>
-          <div className="buttons-holder">
-            <button className="main-page">Main Page</button>
-            <button className="favorites">Favorites</button>
-          </div>
+  const mainPageClicked = e => {
+    e.preventDefault();
+    setVenues([]);
+  };
 
+  return (
+    <div className={venues.length > 0 ? 'App-white' : 'App'}>
+      <div className={venues.length > 0 ? 'header-orange' : 'header'}>
+        <div className="buttons-holder">
+          <button className={venues.length === 0 ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
+          <button className={venues.length === 0 ? 'favorites' : 'favorites-orange'}>Favorites</button>
         </div>
-        {this.state.venues.length > 0
-          ? (
-          <>
-          <h1>Results</h1>
-          <section>
-
-          {
-            this.state.venues.map((venue, i) => (
-              <div className="venue-card" key={`venue-${i}`}>
-                <img src={`${venue.prefix}64.png`} alt="location image" />
-                <div>
-                  <span>{venue.prefix}.png</span>
-                  <h3 className="venue-names">{venue.name}</h3>
-                  <p className="venue-category">{venue.pluralName}</p>
-                  <p className="venue-address">{venue.address}</p>
-                </div>
-              </div>
-            ))
-          }
-              </section>
-          </>
-            )
-          : (
-          <>
-              <h1 className="tripster-header">Tripster</h1>
-              <form onSubmit={this.handleSubmit}>
-                <input className="city-input" type="text" value={this.state.searchtext} name="searchtext" placeholder="City" onChange={this.handlechange} />
-                <input className="activity-input" type="text" value={this.state.activity} name="activity" placeholder="Activity" onChange={this.handlechange} />
-                <button className="search" type="submit">Search</button>
-              </form>
-
-          </>
-            )}
 
       </div>
-    );
-  }
+      {venues.length > 0
+        ? (
+          <>
+            <h1 className= "results">Results</h1>
+            <section>
 
-}
+              {
+                venues.map((venue, i) => {
+
+                  let imageLink = null;
+                  if (imageLinks.length > 0) {
+                    imageLink = imageLinks.find(({ id }) => {
+                      return id === venue.id;
+                    });
+                  }
+                  return (
+                    <div className="venue-card" key={`venue-${i}`}>
+                      {
+                        imageLink && imageLink.url && <img height={200} width={200} src={imageLink.url} alt="location image" />
+                      }
+                      <div className="venue-text">
+                        <h3 className="venue-names">{venue.name}</h3>
+                        <p className="venue-category">{venue.pluralName}</p>
+                        <p className="venue-address">{venue.address}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </section>
+          </>
+          ) : (
+          <>
+            <h1 className="tripster-header">Tripster</h1>
+            <form onSubmit={handleSubmit}>
+              <input
+                className="city-input"
+                type="text"
+                value={searchCity}
+                name="searchText"
+                placeholder="City"
+                onChange={e => setSearchCity(e.target.value)}
+              />
+              <input
+                className="activity-input"
+                type="text"
+                value={searchText}
+                name="activity"
+                placeholder="Activity"
+                onChange={e => setSearchText(e.target.value)}
+              />
+              <button className="search" type="submit">Search</button>
+            </form>
+
+          </>
+          )}
+    </div>
+  );
+};
 
 export default App;
