@@ -8,12 +8,10 @@ const App = () => {
   const [imageLinks, setImageLinks] = useState([]);
 
   useEffect(() => {
-    // eslint-disable-next-line array-callback-return
     venues.forEach((venue, i) => {
 
       if (i > 1) return null;
 
-      // TODO: put this back after testing is complete
       fetch(`/api/venue/image/${venue.id}`)
         .then(data => data.json())
         .then(res => {
@@ -21,7 +19,6 @@ const App = () => {
           if (res.imgUrl) { venues[i].imageUrl = res.imgUrl; } else {
             venues[i].imageUrl = 'https://cdn.stocksnap.io/img-thumbs/960w/sliced-homemade_5BADCUBZS9.jpg';
           }
-          // alert(res.imgUrl);
           setImageLinks(newImageLinks);
         });
     });
@@ -64,19 +61,9 @@ const App = () => {
               {
                 venues.map((venue, i) => {
 
-                  // let imageLink = null;
-                  // if (imageLinks.length > 0) {
-                  //   // imageLink = imageLinks.find(({ id }) => {
-                  //     return id === venue.id;
-                  //   });
-                  // }
                   return (
                     <div className="venue-card" key={`venue-${i}`}>
-                      {
-                        // TODO: put this back after testing
-                      /* {
-                        imageLink && imageLink.url && <img height={200} width={200} src={imageLink.url} alt="location image" />
-                      } */}
+
                       <img
                         height={200}
                         width={200}
@@ -85,7 +72,7 @@ const App = () => {
                         onClick={e => {
                           localStorage.setItem('venue', JSON.stringify(venue));
                           window.location.href = '/venue';
-                          // TODO: store the venue.id in local storage
+
                         }}
                       />
                       <div className="venue-text">

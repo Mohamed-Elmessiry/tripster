@@ -9,7 +9,6 @@ const Venue = () => {
   if (venue.menuUrl) {
 
     menuClass = 'show';
-    // document.getElementById('btnMenu').style.display = 'none';
   }
   const onSave = e => {
     alert('save');
@@ -27,22 +26,24 @@ const Venue = () => {
           <button className={!venue ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
           <button className={!venue ? 'favorites' : 'favorites-orange'}>Favorites</button>
         </div>
-        <section>
-          <div>
-            <img
-              height={200}
-              width={200}
+        <section className='single-view-section'>
+          <div className='single-view-image-holder'>
+            <img className= 'single-view-img'
+
               src={venue.imageUrl}
               alt="venue image"
             />
           </div>
-          <div className="venue-text">
-            <h3 className="venue-names">{venue.name}</h3>
-            <p className="venue-category">{venue.pluralName}</p>
-            <p className="venue-address">{venue.address}</p>
+          <div className="venue-text-single">
+            <h3 className="venue-names-single">{venue.name}</h3>
+            <div className="venue-details-single">
+              <p className="venue-category-single">{venue.pluralName}</p>
+              <p className="venue-address-single">{venue.address}</p>
+            </div>
+
           </div>
-          <div>
-            <button onClick={onSave}>Save</button>
+          <div className="bottomButtons">
+            <button className="save-button" onClick={onSave}>Save</button>
 
             <button className={menuClass} id='btnMenu' onClick={onMenu}>Menu</button>
 
