@@ -5,7 +5,7 @@ const App = () => {
   const [venues, setVenues] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchCity, setSearchCity] = useState('');
-  // const [imageLinks, setImageLinks] = useState([]);
+  const [imageLinks, setImageLinks] = useState([]);
 
   useEffect(() => {
     // eslint-disable-next-line array-callback-return
@@ -14,13 +14,16 @@ const App = () => {
       if (i > 1) return null;
 
       // TODO: put this back after testing is complete
-      // fetch(`/api/venue/image/${venue.id}`)
-      //   .then(data => data.json())
-      //   .then(res => {
-      //     const newImageLinks = imageLinks.concat({ id: venue.id, url: res.imgUrl });
-
-      //     setImageLinks(newImageLinks);
-      //   });
+      fetch(`/api/venue/image/${venue.id}`)
+        .then(data => data.json())
+        .then(res => {
+          const newImageLinks = imageLinks.concat({ id: venue.id, url: res.imgUrl });
+          if (res.imgUrl) { venues[i].imageUrl = res.imgUrl; } else {
+            venues[i].imageUrl = 'https://cdn.stocksnap.io/img-thumbs/960w/sliced-homemade_5BADCUBZS9.jpg';
+          }
+          // alert(res.imgUrl);
+          setImageLinks(newImageLinks);
+        });
     });
   }, [venues]);
 
@@ -29,7 +32,8 @@ const App = () => {
     const api = `/api/venues/${searchCity}/${searchText}`;
     fetch(api)
       .then(res => {
-        return res.json();
+        const data = res.json();
+        return data;
       })
       .then(venues => {
         setVenues(venues);
@@ -76,8 +80,8 @@ const App = () => {
                       <img
                         height={200}
                         width={200}
-                        src={'https://cdn.stocksnap.io/img-thumbs/960w/sliced-homemade_5BADCUBZS9.jpg'}
-                        alt="test img"
+                        src={venue.imageUrl}
+                        alt={venue.name}
                         onClick={e => {
                           localStorage.setItem('venue', JSON.stringify(venue));
                           window.location.href = '/venue';
@@ -88,6 +92,7 @@ const App = () => {
                         <h3 className="venue-names">{venue.name}</h3>
                         <p className="venue-category">{venue.pluralName}</p>
                         <p className="venue-address">{venue.address}</p>
+
                       </div>
                     </div>
                   );

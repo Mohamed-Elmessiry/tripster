@@ -12,15 +12,24 @@ const app = express();
 
 const formatData = json => {
   return json.response.venues
-    .map(({ id, location, name, categories }) => {
+    .map(({ id, location, name, categories, delivery }) => {
       const { address } = location;
       const { pluralName } = categories[0];
+      let url = null;
+
+      if (delivery != null) {
+        if ('url' in delivery) {
+          url = delivery.url;
+        }
+      }
 
       return {
         id,
         address,
         name,
-        pluralName
+        pluralName,
+        menuUrl: url,
+        imageUrl: null
       };
     });
 };
@@ -51,10 +60,13 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   }
 
   fetch(
-    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=10`
+    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=2`
   )
     .then(data => data.json())
     .then(json => {
+      console.log(json);
+      // res.send(json);
+      // res.end();
       res.send(formatData(json));
     });
 });
