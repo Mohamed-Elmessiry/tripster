@@ -64,9 +64,7 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   )
     .then(data => data.json())
     .then(json => {
-      console.log(json);
-      // res.send(json);
-      // res.end();
+
       res.send(formatData(json));
     });
 });
