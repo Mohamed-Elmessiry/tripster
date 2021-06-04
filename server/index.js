@@ -6,6 +6,7 @@ const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
 const fetch = require('node-fetch');
 const ClientError = require('./client-error');
+const path = require('path');
 
 const app = express();
 
@@ -56,6 +57,12 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
     .then(json => {
       res.send(formatData(json));
     });
+});
+
+app.use((req, res) => {
+  res.sendFile('/index.html', {
+    root: path.join(__dirname, 'public')
+  });
 });
 
 app.use(errorMiddleware);
