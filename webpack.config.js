@@ -36,6 +36,7 @@ module.exports = {
     contentBase: serverPublicPath,
     watchContentBase: true,
     stats: 'minimal',
+    historyApiFallback: true,
     proxy: {
       '/api': `http://localhost:${process.env.PORT}`
     }

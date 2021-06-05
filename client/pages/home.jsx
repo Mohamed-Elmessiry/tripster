@@ -8,7 +8,6 @@ const App = () => {
   const [imageLinks, setImageLinks] = useState([]);
 
   useEffect(() => {
-    // eslint-disable-next-line array-callback-return
     venues.forEach((venue, i) => {
 
       if (i > 1) return null;
@@ -17,7 +16,9 @@ const App = () => {
         .then(data => data.json())
         .then(res => {
           const newImageLinks = imageLinks.concat({ id: venue.id, url: res.imgUrl });
-
+          if (res.imgUrl) { venues[i].imageUrl = res.imgUrl; } else {
+            venues[i].imageUrl = 'https://cdn.stocksnap.io/img-thumbs/960w/sliced-homemade_5BADCUBZS9.jpg';
+          }
           setImageLinks(newImageLinks);
         });
     });
@@ -28,7 +29,8 @@ const App = () => {
     const api = `/api/venues/${searchCity}/${searchText}`;
     fetch(api)
       .then(res => {
-        return res.json();
+        const data = res.json();
+        return data;
       })
       .then(venues => {
         setVenues(venues);
@@ -59,21 +61,25 @@ const App = () => {
               {
                 venues.map((venue, i) => {
 
-                  let imageLink = null;
-                  if (imageLinks.length > 0) {
-                    imageLink = imageLinks.find(({ id }) => {
-                      return id === venue.id;
-                    });
-                  }
                   return (
                     <div className="venue-card" key={`venue-${i}`}>
-                      {
-                        imageLink && imageLink.url && <img height={200} width={200} src={imageLink.url} alt="location image" />
-                      }
+
+                      <img
+                        height={200}
+                        width={200}
+                        src={venue.imageUrl}
+                        alt={venue.name}
+                        onClick={e => {
+                          localStorage.setItem('venue', JSON.stringify(venue));
+                          window.location.href = '/venue';
+
+                        }}
+                      />
                       <div className="venue-text">
                         <h3 className="venue-names">{venue.name}</h3>
                         <p className="venue-category">{venue.pluralName}</p>
                         <p className="venue-address">{venue.address}</p>
+
                       </div>
                     </div>
                   );
