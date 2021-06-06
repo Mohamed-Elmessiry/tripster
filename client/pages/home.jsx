@@ -6,56 +6,86 @@ const App = () => {
   const [searchText, setSearchText] = useState('');
   const [searchCity, setSearchCity] = useState('');
   const [imageLinks, setImageLinks] = useState([]);
+  const [title, setTitle] = useState('Results');
+  const [imageFlag, setImageFlag] = useState(true);
+  // alert('start');
 
   useEffect(() => {
+    if (imageFlag) { getImages(); }
+
+  }, [venues]);
+
+  const getImages = e => {
+    if (!imageFlag) { return; }
+    // alert('get images: ' + venues.length);
     venues.forEach((venue, i) => {
 
-      if (i > 1) return null;
-
+      // if (i > 1) return null;
+      //   console.log('VENUE.ID: ' + venue.id);
       fetch(`/api/venue/image/${venue.id}`)
         .then(data => data.json())
         .then(res => {
           const newImageLinks = imageLinks.concat({ id: venue.id, url: res.imgUrl });
+
           if (res.imgUrl) { venues[i].imageUrl = res.imgUrl; } else {
-            venues[i].imageUrl = 'https://cdn.stocksnap.io/img-thumbs/960w/sliced-homemade_5BADCUBZS9.jpg';
+
+            venues[i].imageUrl = 'http://localhost:3001/images/noimage.jpeg';
           }
           setImageLinks(newImageLinks);
         });
     });
-  }, [venues]);
-
+  };
   const handleSubmit = e => {
     event.preventDefault();
+    setTitle('Results');
     const api = `/api/venues/${searchCity}/${searchText}`;
     fetch(api)
       .then(res => {
         const data = res.json();
+
         return data;
       })
       .then(venues => {
+
+        setImageFlag(true);
         setVenues(venues);
+
       });
     console.error();
   };
+  const favorites = e => {
+    setImageFlag(false);
+    const uri = '/api/user/favorites';
+    setTitle('Favorites');
+    fetch(uri).then(res => {
+      const data = res.json();
 
+      return data;
+    }).then(venues => {
+
+      setVenues(venues);
+    });
+  };
   const mainPageClicked = e => {
+    localStorage.removeItem('favorites');
     e.preventDefault();
     setVenues([]);
   };
+  if (localStorage.getItem('favorites')) { favorites(); }
 
   return (
     <div className={venues.length > 0 ? 'app-white' : 'app'}>
       <div className={venues.length > 0 ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
           <button className={venues.length === 0 ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
-          <button className={venues.length === 0 ? 'favorites' : 'favorites-orange'}>Favorites</button>
+          <button className={venues.length === 0 ? 'favorites' : 'favorites-orange'} onClick={favorites}>Favorites</button>
         </div>
 
       </div>
       {venues.length > 0
         ? (
           <>
-            <h1 className= "results">Results</h1>
+            <h1 className= "results" id='h1Title'>{title}</h1>
             <section>
 
               {

@@ -218,3 +218,17 @@ form {
   width: 75px;
   border-radius: 5px;
 }
+
+@media (max-width: 414px) {
+  .app-white {
+    width: 414px;
+  }
+
+  .app {
+    width: 414px;
+  }
+
+  img {
+    width: 100px;
+  }
+}

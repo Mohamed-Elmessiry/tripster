@@ -1,6 +1,9 @@
 import React from 'react';
 
 const Venue = () => {
+  // eslint-disable-next-line no-unused-vars
+  const temp = localStorage.getItem('venue');
+  // alert(temp);
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
     return <></>;
@@ -10,13 +13,29 @@ const Venue = () => {
 
     menuClass = 'show';
   }
+
   const onSave = e => {
-    alert('save');
+    // alert('save: ' + venue.id);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(venue)
+    };
+    fetch('/api/user/addFavorite/', requestOptions).then(res => {
+      // eslint-disable-next-line no-console
+      console.log(res);
+      alert(res);
+    });
   };
   const onMenu = e => {
     window.open(venue.menuUrl);
   };
   const mainPageClicked = e => {
+    localStorage.removeItem('favorites');
+    window.location.replace('/');
+  };
+  const favorites = e => {
+    localStorage.setItem('favorites', true);
     window.location.replace('/');
   };
   return (
@@ -24,7 +43,7 @@ const Venue = () => {
       <div className={venue ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
           <button className={!venue ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
-          <button className={!venue ? 'favorites' : 'favorites-orange'}>Favorites</button>
+          <button className={!venue ? 'favorites' : 'favorites-orange'} onClick={favorites}>Favorites</button>
         </div>
         <section className='single-view-section'>
           <div className='single-view-image-holder'>
