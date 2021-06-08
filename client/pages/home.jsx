@@ -17,11 +17,8 @@ const App = () => {
 
   const getImages = e => {
     if (!imageFlag) { return; }
-    // alert('get images: ' + venues.length);
     venues.forEach((venue, i) => {
 
-      // if (i > 1) return null;
-      //   console.log('VENUE.ID: ' + venue.id);
       fetch(`/api/venue/image/${venue.id}`)
         .then(data => data.json())
         .then(res => {
