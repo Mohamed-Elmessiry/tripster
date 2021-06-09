@@ -93,7 +93,7 @@ app.get('/api/user/favorites', (req, res, next) => {
   const venues = [];
   db.all('SELECT venue_json FROM favorites', [], (err, rows) => {
     if (err) {
-      console.log('error');
+      console.error();
     }
     rows.forEach(function (row) {
       const obj = JSON.parse(row.venue_json);
