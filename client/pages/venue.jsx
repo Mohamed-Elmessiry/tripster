@@ -3,7 +3,6 @@ import React from 'react';
 const Venue = () => {
   // eslint-disable-next-line no-unused-vars
   const temp = localStorage.getItem('venue');
-  // alert(temp);
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
     return <></>;
@@ -15,15 +14,12 @@ const Venue = () => {
   }
 
   const onSave = e => {
-    // alert('save: ' + venue.id);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(venue)
     };
     fetch('/api/user/addFavorite/', requestOptions).then(res => {
-      // eslint-disable-next-line no-console
-      console.log(res);
       alert(res);
     });
   };

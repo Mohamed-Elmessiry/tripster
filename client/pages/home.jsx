@@ -8,7 +8,6 @@ const App = () => {
   const [imageLinks, setImageLinks] = useState([]);
   const [title, setTitle] = useState('Results');
   const [imageFlag, setImageFlag] = useState(false);
-  // alert('start');
 
   useEffect(() => {
     if (imageFlag) { getImages(); }
@@ -52,7 +51,6 @@ const App = () => {
   };
   const favorites = e => {
     setImageFlag(false);
-    // alert('favorites');
     const uri = '/api/user/favorites';
     setTitle('Favorites');
     fetch(uri).then(res => {
@@ -69,7 +67,6 @@ const App = () => {
     e.preventDefault();
     setVenues([]);
   };
-  // if (localStorage.getItem('favorites')) { favorites(); }
 
   return (
     <div className={venues.length > 0 ? 'app-white' : 'app'}>
