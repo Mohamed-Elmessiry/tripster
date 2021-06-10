@@ -20,7 +20,6 @@ const Venue = () => {
       body: JSON.stringify(venue)
     };
     fetch('/api/user/addFavorite/', requestOptions).then(res => {
-      alert(res);
     });
   };
   const onMenu = e => {
