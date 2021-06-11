@@ -9,6 +9,10 @@ const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const path = require('path');
 const sqlite = require('sqlite3');
+const { Client } = require('pg');
+// eslint-disable-next-line no-unused-vars
+const client = new Client();
+// await client.connect()
 
 const app = express();
 
@@ -134,6 +138,8 @@ app.use((req, res) => {
 });
 
 app.use(errorMiddleware);
+
+// await client.end()
 
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
