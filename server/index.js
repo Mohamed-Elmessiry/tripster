@@ -9,10 +9,8 @@ const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const path = require('path');
 const sqlite = require('sqlite3');
-const { Client } = require('pg');
 // eslint-disable-next-line no-unused-vars
-const client = new Client();
-// await client.connect()
+const dbpg = require('./db');
 
 const app = express();
 
@@ -92,32 +90,90 @@ app.get('/create', (req, res, next) => {
   db.close();
   res.end('created');
 });
+
 app.get('/api/user/favorites', (req, res, next) => {
-  const db = new sqlite.Database('./tripster.db');
-  const venues = [];
-  db.all('SELECT venue_json FROM favorites', [], (err, rows) => {
-    if (err) {
-      console.error();
+  // dbpg.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
+  dbpg.query('SELECT * FROM favorites', (qErr, qRes) => {
+    if (qRes && qRes.rows) {
+      res.json(qRes.rows);
+    } else {
+      console.log(qErr);
+      res.json({});
     }
-    rows.forEach(function (row) {
-      const obj = JSON.parse(row.venue_json);
-      venues.push(obj);
-    });
-    res.send(venues);
-    db.close();
-    res.end();
+    // if (qErr) {
+    //   console.log(qErr);
+    //   res.json({ err: qErr });
+    // }
+  });
+
+  // const db = new sqlite.Database('./tripster.db');
+  // const venues = [];
+  // dbpg.query('SELECT venue_json FROM favorites', [], (err, rows) => {
+  //   if (err) {
+  //     console.error();
+  //   }
+  //   rows.forEach(function (row) {
+  //     const obj = JSON.parse(row.venue_json);
+  //     venues.push(obj);
+  //   });
+  //   res.send(venues);
+  //   db.close();
+  //   res.end();
+  // });
+});
+
+app.get('/api/get/allposts', (req, res, next) => {
+  dbpg.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
+    if (qRes && qRes.rows) {
+      res.json(qRes.rows);
+    }
+
+    if (qErr) {
+      console.log(qErr);
+      res.json({ err: qErr });
+    }
   });
 });
-app.get('/api/user/addFavorite/:str', (req, res, next) => {
-  const db = new sqlite.Database('./tripster.db');
-  const str = req.params.str;
-  const params = ['tester', str];
-  db.run('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params);
 
-  db.close();
-  res.end('saved');
+app.get('/api/mock', (req, res, next) => {
+  dbpg.query('SELECT * FROM mock', (qErr, qRes) => {
+    if (qRes && qRes.rows) {
+      res.json(qRes.rows);
+    }
 
+    console.log(qErr);
+  });
 });
+
+app.get('/api/posts', (req, res, next) => {
+  dbpg.query('SELECT * FROM posts', (qErr, qRes) => {
+    if (qRes && qRes.rows) {
+      res.json(qRes.rows);
+    }
+
+    console.log(qErr);
+  });
+});
+
+app.get('/api/user/addFavorite/:str', (req, res, next) => {
+  // const db = new sqlite.Database('./tripster.db');
+  // const str = req.params.str;
+  // const params = ['tester', str];
+  // db.run('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params);
+
+  // db.close();
+  // res.end('saved');
+
+  // const str = req.params.str;
+  const str = '{}';
+  const params = ['tester', str];
+  dbpg.query('INSERT INTO favorites (username, venue_json) VALUES ($1,$2)', params,
+    (qErr, qRes) => {
+      res.json(qRes.rows);
+      console.log(qErr);
+    });
+});
+
 app.post('/api/user/addFavorite/', (req, res, next) => {
   const body = req.body;
   const strBody = JSON.stringify(body);
@@ -131,6 +187,7 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
 
   res.end(strBody);
 });
+
 app.use((req, res) => {
   res.sendFile('/index.html', {
     root: path.join(__dirname, 'public')
