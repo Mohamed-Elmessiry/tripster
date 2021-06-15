@@ -8,12 +8,26 @@ const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const path = require('path');
-const sqlite = require('sqlite3');
+// const sqlite = require('sqlite3');
+const mysql = require('mysql2');
 // eslint-disable-next-line no-unused-vars
 const dbpg = require('./db');
 
 const app = express();
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'tripster',
+  password: 'Trip1234',
+  database: 'tripster',
+  port: '8889'
+});
 
+connection.connect(function (err) {
+  if (err) {
+    console.log(err);
+  }
+  console.log('Connected to MySQL Server!');
+});
 const formatData = json => {
   return json.response.venues
     .map(({ id, location, name, categories, delivery }) => {
@@ -84,22 +98,36 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
     });
 });
 app.get('/create', (req, res, next) => {
-  const db = new sqlite.Database('./tripster.db');
+  // const db = new sqlite.Database('./tripster.db');
 
-  db.run("DELETE FROM favorites WHERE venue_json = '456'");
-  db.close();
-  res.end('created');
+  connection.query("DELETE FROM favorites WHERE venue_json = '456'", function (err) {
+    if (err) {
+      console.log(err);
+    }
+    res.end('created');
+  });
+
 });
-
+app.get('/dbtest', (req, res, next) => {
+  connection.query('SELECT * FROM users', function (err, rows) {
+    if (err) {
+      console.log(err);
+    }
+    res.send(rows);
+  });
+});
 app.get('/api/user/favorites', (req, res, next) => {
   // dbpg.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
-  dbpg.query('SELECT * FROM favorites', (qErr, qRes) => {
-    if (qRes && qRes.rows) {
-      res.json(qRes.rows);
-    } else {
+  console.log('get favorits');
+  connection.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
+    if (qErr) {
       console.log(qErr);
-      res.json({});
     }
+    const data = [];
+    qRes.forEach(row => {
+      data.push(JSON.parse(row.venue_json));
+    });
+    res.send(data);
     // if (qErr) {
     //   console.log(qErr);
     //   res.json({ err: qErr });
@@ -123,7 +151,7 @@ app.get('/api/user/favorites', (req, res, next) => {
 });
 
 app.get('/api/get/allposts', (req, res, next) => {
-  dbpg.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
+  connection.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
@@ -136,7 +164,7 @@ app.get('/api/get/allposts', (req, res, next) => {
 });
 
 app.get('/api/mock', (req, res, next) => {
-  dbpg.query('SELECT * FROM mock', (qErr, qRes) => {
+  connection.query('SELECT * FROM mock', (qErr, qRes) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
@@ -146,7 +174,7 @@ app.get('/api/mock', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-  dbpg.query('SELECT * FROM posts', (qErr, qRes) => {
+  connection.query('SELECT * FROM posts', (qErr, qRes) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
@@ -167,7 +195,7 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
   // const str = req.params.str;
   const str = '{}';
   const params = ['tester', str];
-  dbpg.query('INSERT INTO favorites (username, venue_json) VALUES ($1,$2)', params,
+  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
     (qErr, qRes) => {
       res.json(qRes.rows);
       console.log(qErr);
@@ -178,14 +206,14 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
   const body = req.body;
   const strBody = JSON.stringify(body);
 
-  const db = new sqlite.Database('./tripster.db');
+  // const db = new sqlite.Database('./tripster.db');
 
   const params = ['tester', strBody];
-  db.run('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params);
+  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
+    res.json(qRes.rows);
+    console.log(qErr);
+  });
 
-  db.close();
-
-  res.end(strBody);
 });
 
 app.use((req, res) => {

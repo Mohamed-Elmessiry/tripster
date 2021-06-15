@@ -25,7 +25,7 @@ const App = () => {
 
           if (res.imgUrl) { venues[i].imageUrl = res.imgUrl; } else {
 
-            venues[i].imageUrl = 'http://localhost:3001/images/noimage.jpeg';
+            venues[i].imageUrl = 'images/noimage.jpeg';
           }
           setImageLinks(newImageLinks);
         });
@@ -54,8 +54,9 @@ const App = () => {
     const uri = '/api/user/favorites';
     setTitle('Favorites');
     fetch(uri).then(res => {
-      const data = res.json();
 
+      const data = res.json();
+      // console.log(data);
       return data;
     }).then(venues => {
 
