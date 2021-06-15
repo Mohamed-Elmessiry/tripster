@@ -10,8 +10,11 @@ const App = () => {
   const [imageFlag, setImageFlag] = useState(false);
 
   useEffect(() => {
+    if ((window.location.search + '').indexOf('avorit') > 0) {
+      favorites();
+    }
     if (imageFlag) { getImages(); }
-    if (localStorage.getItem('favorites')) { favorites(); }
+    // if (localStorage.getItem('favorites')) { favorites(); }
   }, [venues]);
 
   const getImages = e => {

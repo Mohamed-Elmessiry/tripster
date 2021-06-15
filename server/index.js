@@ -52,7 +52,7 @@ const formatData = json => {
     });
 };
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);
 
 app.get('/api/venue/image/:id?', (req, res, next) => {

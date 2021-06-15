@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'react-router-dom';
 
 const Venue = () => {
   // eslint-disable-next-line no-unused-vars
@@ -25,20 +26,14 @@ const Venue = () => {
   const onMenu = e => {
     window.open(venue.menuUrl);
   };
-  const mainPageClicked = e => {
-    localStorage.removeItem('favorites');
-    window.location.replace('/');
-  };
-  const favorites = e => {
-    localStorage.setItem('favorites', true);
-    window.location.replace('/');
-  };
+
   return (
     <div className={venue ? 'app-white' : 'app'}>
       <div className={venue ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
-          <button className={!venue ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
-          <button className={!venue ? 'favorites' : 'favorites-orange'} onClick={favorites}>Favorites</button>
+          <Link to={'/'} lassName={!venue ? 'main-page' : 'main-page-orange'} >Home Page</Link>
+          <Link to={'/?favorites=true'} lassName={!venue ? 'main-page' : 'main-page-orange'} >Favorite</Link>
+
         </div>
         <section className='single-view-section'>
           <div className='single-view-image-holder'>
