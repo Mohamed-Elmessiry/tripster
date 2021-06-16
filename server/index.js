@@ -96,7 +96,6 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
     });
 });
 app.get('/create', (req, res, next) => {
-  // const db = new sqlite.Database('./tripster.db');
 
   connection.query("DELETE FROM favorites WHERE venue_json = '456'", function (err) {
     if (err) {

@@ -14,7 +14,6 @@ const App = () => {
       favorites();
     }
     if (imageFlag) { getImages(); }
-    // if (localStorage.getItem('favorites')) { favorites(); }
   }, [venues]);
 
   const getImages = e => {
@@ -59,7 +58,6 @@ const App = () => {
     fetch(uri).then(res => {
 
       const data = res.json();
-      // console.log(data);
       return data;
     }).then(venues => {
 
