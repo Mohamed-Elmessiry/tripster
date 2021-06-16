@@ -24,9 +24,8 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) {
-    console.log(err);
+    console.error(err);
   }
-  console.log('Connected to MySQL Server!');
 });
 const formatData = json => {
   return json.response.venues
@@ -101,7 +100,7 @@ app.get('/create', (req, res, next) => {
 
   connection.query("DELETE FROM favorites WHERE venue_json = '456'", function (err) {
     if (err) {
-      console.log(err);
+      console.error(err);
     }
     res.end('created');
   });
@@ -110,16 +109,16 @@ app.get('/create', (req, res, next) => {
 app.get('/dbtest', (req, res, next) => {
   connection.query('SELECT * FROM users', function (err, rows) {
     if (err) {
-      console.log(err);
+      console.error(err);
     }
     res.send(rows);
   });
 });
 app.get('/api/user/favorites', (req, res, next) => {
-  console.log('get favorits');
+
   connection.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
     if (qErr) {
-      console.log(qErr);
+      console.error(qErr);
     }
     const data = [];
     qRes.forEach(row => {
@@ -138,7 +137,7 @@ app.get('/api/get/allposts', (req, res, next) => {
     }
 
     if (qErr) {
-      console.log(qErr);
+      console.error(qErr);
       res.json({ err: qErr });
     }
   });
@@ -150,7 +149,7 @@ app.get('/api/mock', (req, res, next) => {
       res.json(qRes.rows);
     }
 
-    console.log(qErr);
+    console.error(qErr);
   });
 });
 
@@ -171,7 +170,7 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
     (qErr, qRes) => {
       res.json(qRes.rows);
-      console.log(qErr);
+      console.error(qErr);
     });
 });
 
@@ -182,7 +181,7 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
   const params = ['tester', strBody];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
     res.json(qRes.rows);
-    console.log(qErr);
+    console.error(qErr);
   });
 
 });
