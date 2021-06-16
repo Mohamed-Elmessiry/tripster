@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Venue = () => {
-  // eslint-disable-next-line no-unused-vars
-  const temp = localStorage.getItem('venue');
+  // const temp = localStorage.getItem('venue');
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
 

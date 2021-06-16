@@ -50,20 +50,39 @@ const formatData = json => {
 app.use(bodyParser.json());
 app.use(staticMiddleware);
 
-app.get('/api/venue/image/:id?', (req, res, next) => {
+app.get('/api/venue/image/:id?', async (req, res, next) => {
   const id = req.params.id;
   const uri = `https://api.foursquare.com/v2/venues/${id}/photos?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&v=20210514`;
-  fetch(uri)
-
+  // res.send(uri);
+  try {
+    const photodata = await fetch(uri);
+    const item = photodata.response.photos.items[0];
+    const imgUrl = `${item.prefix}${item.height}x${item.width}${item.suffix}`;
+    console.log('sending');
+    res.send({ imgUrl: imgUrl });
+  } catch (e) {
+    // console.log('error');
+    res.send('error');
+  }
+  /*
     .then(data => data.json())
     .then(photodata => {
+
       const item = photodata.response.photos.items[0];
       const imgUrl = `${item.prefix}${item.height}x${item.width}${item.suffix}`;
-      res.send({ imgUrl });
+      console.log('sending');
+      res.send({ imgUrl: imgUrl });
+
     })
     .catch(error => {
-      next(res.send(error));
+
+      // console.log('catch');
+      // res.send('error');
+      res.status(500);
+      // next(res.send('failed'));
+
     });
+*/
 });
 app.get('/api/venue/:id', (req, res, next) => {
   const id = req.params.id;
@@ -73,7 +92,7 @@ app.get('/api/venue/:id', (req, res, next) => {
     .then(data => data.json())
     .then(json => {
       res.send(json);
-      res.end();
+      // res.end();
     });
 });
 app.get('/api/venues/:city/:search', (req, res, next) => {
@@ -96,9 +115,12 @@ app.get('/create', (req, res, next) => {
 
   connection.query("DELETE FROM favorites WHERE venue_json = '456'", function (err) {
     if (err) {
-      console.error(err);
+
+      res.status(500).send('error');
+      // console.error(err);
+    } else {
+      res.end('created');
     }
-    res.end('created');
   });
 
 });
@@ -128,13 +150,15 @@ app.get('/api/user/favorites', (req, res, next) => {
 
 app.get('/api/get/allposts', (req, res, next) => {
   connection.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
-    if (qRes && qRes.rows) {
-      res.json(qRes.rows);
-    }
 
     if (qErr) {
       console.error(qErr);
-      res.json({ err: qErr });
+
+      res.status(500).send('error retrieving all posts');
+    } else if (qRes && qRes.rows) {
+      res.json(qRes.rows);
+    } else {
+      res.end('no data found');
     }
   });
 });
