@@ -1,13 +1,15 @@
 import React from 'react';
-import Link from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Venue = () => {
   // eslint-disable-next-line no-unused-vars
   const temp = localStorage.getItem('venue');
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
+
     return <></>;
   }
+
   let menuClass = 'hidden';
   if (venue.menuUrl) {
 
@@ -31,8 +33,8 @@ const Venue = () => {
     <div className={venue ? 'app-white' : 'app'}>
       <div className={venue ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
-          <Link to={'/'} lassName={!venue ? 'main-page' : 'main-page-orange'} >Home Page</Link>
-          <Link to={'/?favorites=true'} lassName={!venue ? 'main-page' : 'main-page-orange'} >Favorite</Link>
+          <Link to={'/'} className={!venue ? 'main-page' : 'main-page-orange'} >Main Page</Link>
+          <Link to={'/?favorites=true'} className={!venue ? 'main-page' : 'main-page-orange'} >Favorites</Link>
 
         </div>
         <section className='single-view-section'>
