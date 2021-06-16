@@ -9,8 +9,6 @@ const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const path = require('path');
 const mysql = require('mysql2');
-// eslint-disable-next-line no-unused-vars
-const dbpg = require('./db');
 
 const app = express();
 const connection = mysql.createConnection({
