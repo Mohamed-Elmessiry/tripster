@@ -52,7 +52,6 @@ const formatData = json => {
     });
 };
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);
 
 app.get('/api/venue/image/:id?', (req, res, next) => {
@@ -117,7 +116,6 @@ app.get('/dbtest', (req, res, next) => {
   });
 });
 app.get('/api/user/favorites', (req, res, next) => {
-  // dbpg.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
   console.log('get favorits');
   connection.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
     if (qErr) {
@@ -128,26 +126,9 @@ app.get('/api/user/favorites', (req, res, next) => {
       data.push(JSON.parse(row.venue_json));
     });
     res.send(data);
-    // if (qErr) {
-    //   console.log(qErr);
-    //   res.json({ err: qErr });
-    // }
+
   });
 
-  // const db = new sqlite.Database('./tripster.db');
-  // const venues = [];
-  // dbpg.query('SELECT venue_json FROM favorites', [], (err, rows) => {
-  //   if (err) {
-  //     console.error();
-  //   }
-  //   rows.forEach(function (row) {
-  //     const obj = JSON.parse(row.venue_json);
-  //     venues.push(obj);
-  //   });
-  //   res.send(venues);
-  //   db.close();
-  //   res.end();
-  // });
 });
 
 app.get('/api/get/allposts', (req, res, next) => {
@@ -184,15 +165,7 @@ app.get('/api/posts', (req, res, next) => {
 });
 
 app.get('/api/user/addFavorite/:str', (req, res, next) => {
-  // const db = new sqlite.Database('./tripster.db');
-  // const str = req.params.str;
-  // const params = ['tester', str];
-  // db.run('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params);
 
-  // db.close();
-  // res.end('saved');
-
-  // const str = req.params.str;
   const str = '{}';
   const params = ['tester', str];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
@@ -205,8 +178,6 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
 app.post('/api/user/addFavorite/', (req, res, next) => {
   const body = req.body;
   const strBody = JSON.stringify(body);
-
-  // const db = new sqlite.Database('./tripster.db');
 
   const params = ['tester', strBody];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
@@ -223,8 +194,6 @@ app.use((req, res) => {
 });
 
 app.use(errorMiddleware);
-
-// await client.end()
 
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
