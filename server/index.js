@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const path = require('path');
-// const sqlite = require('sqlite3');
 const mysql = require('mysql2');
 // eslint-disable-next-line no-unused-vars
 const dbpg = require('./db');
