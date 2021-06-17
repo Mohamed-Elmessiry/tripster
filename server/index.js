@@ -97,7 +97,6 @@ app.get('/create', (req, res, next) => {
     if (err) {
 
       res.status(500).send('error');
-      // console.error(err);
     } else {
       res.end('created');
     }
