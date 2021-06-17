@@ -49,41 +49,22 @@ const formatData = json => {
 };
 app.use(bodyParser.json());
 app.use(staticMiddleware);
-
-app.get('/api/venue/image/:id?', async (req, res, next) => {
+app.get('/api/venue/image/:id?', (req, res, next) => {
   const id = req.params.id;
-  const uri = `https://api.foursquare.com/v2/venues/${id}/photos?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&v=20210514`;
-  // res.send(uri);
-  try {
-    const photodata = await fetch(uri);
-    const item = photodata.response.photos.items[0];
-    const imgUrl = `${item.prefix}${item.height}x${item.width}${item.suffix}`;
-    console.log('sending');
-    res.send({ imgUrl: imgUrl });
-  } catch (e) {
-    // console.log('error');
-    res.send('error');
-  }
-  /*
+
+  fetch(`https://api.foursquare.com/v2/venues/${id}/photos?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&v=20210514`)
+
     .then(data => data.json())
     .then(photodata => {
-
       const item = photodata.response.photos.items[0];
       const imgUrl = `${item.prefix}${item.height}x${item.width}${item.suffix}`;
-      console.log('sending');
-      res.send({ imgUrl: imgUrl });
-
+      res.send({ imgUrl });
     })
     .catch(error => {
-
-      // console.log('catch');
-      // res.send('error');
-      res.status(500);
-      // next(res.send('failed'));
-
+      next(res.send(error));
     });
-*/
 });
+
 app.get('/api/venue/:id', (req, res, next) => {
   const id = req.params.id;
   const uri = `https://api.foursquare.com/v2/venues/${id}/?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&limit=4`;
@@ -92,7 +73,6 @@ app.get('/api/venue/:id', (req, res, next) => {
     .then(data => data.json())
     .then(json => {
       res.send(json);
-      // res.end();
     });
 });
 app.get('/api/venues/:city/:search', (req, res, next) => {
@@ -103,7 +83,7 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   }
 
   fetch(
-    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=4`
+    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=2`
   )
     .then(data => data.json())
     .then(json => {
