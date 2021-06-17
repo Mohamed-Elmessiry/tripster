@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Venue = () => {
-  // const temp = localStorage.getItem('venue');
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
 
