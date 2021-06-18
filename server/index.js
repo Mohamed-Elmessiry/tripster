@@ -1,5 +1,3 @@
-
-/* eslint-disable no-console */
 require('dotenv/config');
 const express = require('express');
 const errorMiddleware = require('./error-middleware');
@@ -56,7 +54,7 @@ app.get('/api/venue/image/:id?', (req, res, next) => {
       res.send({ imgUrl });
     })
     .catch(error => {
-      next(res.status(500).send(error));
+      next(res.send(error));
     });
 });
 
@@ -92,7 +90,6 @@ app.get('/create', (req, res, next) => {
     if (err) {
 
       res.status(500).send('error');
-      console.error(err);
     } else {
       res.end('created');
     }
@@ -102,7 +99,6 @@ app.get('/create', (req, res, next) => {
 app.get('/dbtest', (req, res, next) => {
   connection.query('SELECT * FROM users', function (err, rows) {
     if (err) {
-      res.status(500).send('error');
       console.error(err);
     }
     res.send(rows);
@@ -112,7 +108,6 @@ app.get('/api/user/favorites', (req, res, next) => {
 
   connection.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
     if (qErr) {
-      res.status(500).send('error');
       console.error(qErr);
     }
     const data = [];
@@ -145,7 +140,7 @@ app.get('/api/mock', (req, res, next) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
-    res.status(500).send('error');
+
     console.error(qErr);
   });
 });
@@ -155,8 +150,8 @@ app.get('/api/posts', (req, res, next) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
-    res.status(500).send('error');
-    console.log(qErr);
+
+    console.error(qErr);
   });
 });
 
@@ -167,7 +162,6 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
     (qErr, qRes) => {
       res.json(qRes.rows);
-      res.status(500).send('error');
       console.error(qErr);
     });
 });
@@ -179,9 +173,7 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
   const params = ['tester', strBody];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
     res.json(qRes.rows);
-    res.status(500).send('error');
     console.error(qErr);
-
   });
 
 });
