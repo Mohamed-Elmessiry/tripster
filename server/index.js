@@ -19,11 +19,6 @@ const connection = mysql.createConnection({
   port: '8889'
 });
 
-connection.connect(function (err) {
-  if (err) {
-    console.error(err);
-  }
-});
 const formatData = json => {
   return json.response.venues
     .map(({ id, location, name, categories, delivery }) => {
