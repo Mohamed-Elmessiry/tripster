@@ -1,6 +1,6 @@
 # tripster
 
-A full stack JavaScript solo project. tripster is an app allowing users to search for recreational acitivies for different locations. Users can search for restaurants, bars, comedy club. The app also allows users to view the menu of the restaurants, while giving them the ability to save their favorites venues.
+A full stack solo project. tripster is an app allowing users to search for recreational acitivies for different locations. Users can search for restaurants, bars, comedy club. The app also allows users to view the menu of the restaurants, while giving them the ability to save their favorites venues.
 
 # Languages used 
 * React
