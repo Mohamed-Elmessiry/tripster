@@ -89,7 +89,7 @@ app.get('/create', (req, res, next) => {
   connection.query("DELETE FROM favorites WHERE venue_json = '456'", function (err) {
     if (err) {
 
-      res.status(500).send('error');
+      throw new ClientError(400, 'Information not found');
     } else {
       res.end('created');
     }
@@ -126,7 +126,7 @@ app.get('/api/get/allposts', (req, res, next) => {
     if (qErr) {
       console.error(qErr);
 
-      res.status(500).send('error retrieving all posts');
+      res.status(400).send('error retrieving all posts');
     } else if (qRes && qRes.rows) {
       res.json(qRes.rows);
     } else {
@@ -161,8 +161,12 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
   const params = ['tester', str];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
     (qErr, qRes) => {
+      if (qErr) {
+        console.error(qErr);
+        res.status(404).send('requested info not found');
+      }
       res.json(qRes.rows);
-      console.error(qErr);
+
     });
 });
 
@@ -172,8 +176,11 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
 
   const params = ['tester', strBody];
   connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
+    if (qErr) {
+      console.error(qErr);
+      res.status(404).send('requested info not found');
+    }
     res.json(qRes.rows);
-    console.error(qErr);
   });
 
 });
