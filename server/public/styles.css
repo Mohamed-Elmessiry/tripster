@@ -27,6 +27,11 @@ section {
   padding-top: 50px;
 }
 
+img:hover {
+  cursor: pointer;
+  outline: solid orange;
+}
+
 button {
   font-family: anton, sans-serif;
   color: #4b4b4b;
@@ -58,12 +63,22 @@ button {
   padding-right: 50px;
 }
 
+.main-page:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .favorites {
   font-family: anton, sans-serif;
   color: white;
   font-size: 14px;
   background-color: #62605c;
   border: none;
+}
+
+.favorites:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .main-page-orange {
@@ -75,12 +90,22 @@ button {
   padding-right: 50px;
 }
 
+.main-page-orange:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .favorites-orange {
   font-family: anton, sans-serif;
   color: white;
   font-size: 14px;
   background-color: orange;
   border: none;
+}
+
+.favorites-orange:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 input {
@@ -112,6 +137,12 @@ form {
   color: #62605c;
   font-size: 11px;
   height: 25px;
+}
+
+.search:hover {
+  background-color: #62605c;
+  color: white;
+  cursor: pointer;
 }
 
 .city-input {
@@ -217,4 +248,14 @@ form {
   border: none;
   width: 75px;
   border-radius: 5px;
+}
+
+.save-button:hover {
+  cursor: pointer;
+  background-color: #62605c;
+}
+
+#btnMenu:hover {
+  cursor: pointer;
+  background-color: #62605c;
 }

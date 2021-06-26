@@ -10,8 +10,6 @@ const App = () => {
   useEffect(() => {
     venues.forEach((venue, i) => {
 
-      if (i > 1) return null;
-
       fetch(`/api/venue/image/${venue.id}`)
         .then(data => data.json())
         .then(res => {
