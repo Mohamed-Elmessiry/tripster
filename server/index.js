@@ -150,7 +150,6 @@ app.get('/api/posts', (req, res, next) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
-
     console.error(qErr);
   });
 });
