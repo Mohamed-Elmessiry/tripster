@@ -73,16 +73,17 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   const cityname = req.params.city;
   if (!searchQuery || !cityname) {
     throw new ClientError(400, 'please provide the required information');
-  }
+  } else {
 
-  fetch(
+    fetch(
     `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=2`
-  )
-    .then(data => data.json())
-    .then(json => {
+    )
+      .then(data => data.json())
+      .then(json => {
 
-      res.send(formatData(json));
-    });
+        res.send(formatData(json));
+      });
+  }
 });
 app.get('/create', (req, res, next) => {
 
@@ -101,8 +102,9 @@ app.get('/dbtest', (req, res, next) => {
     if (err) {
       console.error(err);
       throw new ClientError(400, 'Information not found');
+    } else {
+      res.send(rows);
     }
-    res.send(rows);
   });
 });
 app.get('/api/user/favorites', (req, res, next) => {
@@ -111,13 +113,13 @@ app.get('/api/user/favorites', (req, res, next) => {
     if (qErr) {
       console.error(qErr);
       res.status(400).send('error retrieving venue');
+    } else {
+      const data = [];
+      qRes.forEach(row => {
+        data.push(JSON.parse(row.venue_json));
+      });
+      res.send(data);
     }
-    const data = [];
-    qRes.forEach(row => {
-      data.push(JSON.parse(row.venue_json));
-    });
-    res.send(data);
-
   });
 
 });
@@ -141,10 +143,11 @@ app.get('/api/mock', (req, res, next) => {
   connection.query('SELECT * FROM mock', (qErr, qRes) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
-    }
+    } else {
 
-    console.error(qErr);
-    res.status(400).send('error retreiving information');
+      console.error(qErr);
+      res.status(400).send('error retreiving information');
+    }
   });
 });
 
@@ -152,10 +155,11 @@ app.get('/api/posts', (req, res, next) => {
   connection.query('SELECT * FROM posts', (qErr, qRes) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
-    }
+    } else {
 
-    console.error(qErr);
-    res.status(400).send('error retreiving data from posts');
+      console.error(qErr);
+      res.status(400).send('error retreiving data from posts');
+    }
   });
 });
 
@@ -168,8 +172,9 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
       if (qErr) {
         console.error(qErr);
         res.status(404).send('requested info not found');
+      } else {
+        res.json(qRes.rows);
       }
-      res.json(qRes.rows);
 
     });
 });
@@ -183,8 +188,9 @@ app.post('/api/user/addFavorite/', (req, res, next) => {
     if (qErr) {
       console.error(qErr);
       res.status(404).send('requested info not found');
+    } else {
+      res.json(qRes.rows);
     }
-    res.json(qRes.rows);
   });
 
 });
