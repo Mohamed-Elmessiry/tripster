@@ -100,6 +100,7 @@ app.get('/dbtest', (req, res, next) => {
   connection.query('SELECT * FROM users', function (err, rows) {
     if (err) {
       console.error(err);
+      throw new ClientError(400, 'Information not found');
     }
     res.send(rows);
   });
@@ -109,6 +110,7 @@ app.get('/api/user/favorites', (req, res, next) => {
   connection.query('SELECT venue_json FROM favorites', (qErr, qRes) => {
     if (qErr) {
       console.error(qErr);
+      res.status(400).send('error retrieving venue');
     }
     const data = [];
     qRes.forEach(row => {
@@ -142,6 +144,7 @@ app.get('/api/mock', (req, res, next) => {
     }
 
     console.error(qErr);
+    res.status(400).send('error retreiving information');
   });
 });
 
@@ -150,7 +153,9 @@ app.get('/api/posts', (req, res, next) => {
     if (qRes && qRes.rows) {
       res.json(qRes.rows);
     }
+
     console.error(qErr);
+    res.status(400).send('error retreiving data from posts');
   });
 });
 
