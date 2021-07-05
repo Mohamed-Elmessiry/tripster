@@ -1,30 +1,39 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Venue = () => {
   const venue = JSON.parse(localStorage.getItem('venue'));
   if (!venue) {
+
     return <></>;
   }
+
   let menuClass = 'hidden';
   if (venue.menuUrl) {
 
     menuClass = 'show';
   }
+
   const onSave = e => {
-    alert('save');
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(venue)
+    };
+    fetch('/api/user/addFavorite/', requestOptions).then(res => {
+    });
   };
   const onMenu = e => {
     window.open(venue.menuUrl);
   };
-  const mainPageClicked = e => {
-    window.location.replace('/');
-  };
+
   return (
     <div className={venue ? 'app-white' : 'app'}>
       <div className={venue ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
-          <button className={!venue ? 'main-page' : 'main-page-orange'} onClick={mainPageClicked}>Main Page</button>
-          <button className={!venue ? 'favorites' : 'favorites-orange'}>Favorites</button>
+          <Link to={'/'} className={!venue ? 'main-page' : 'main-page-orange'} >Main Page</Link>
+          <Link to={'/?favorites=true'} className={!venue ? 'main-page' : 'main-page-orange'} >Favorites</Link>
+
         </div>
         <section className='single-view-section'>
           <div className='single-view-image-holder'>

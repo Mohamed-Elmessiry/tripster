@@ -27,11 +27,6 @@ section {
   padding-top: 50px;
 }
 
-img:hover {
-  cursor: pointer;
-  outline: solid orange;
-}
-
 button {
   font-family: anton, sans-serif;
   color: #4b4b4b;
@@ -61,11 +56,7 @@ button {
   background-color: #62605c;
   border: none;
   padding-right: 50px;
-}
-
-.main-page:hover {
-  text-decoration: underline;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .favorites {
@@ -76,11 +67,6 @@ button {
   border: none;
 }
 
-.favorites:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 .main-page-orange {
   font-family: anton, sans-serif;
   color: white;
@@ -88,11 +74,7 @@ button {
   background-color: orange;
   border: none;
   padding-right: 50px;
-}
-
-.main-page-orange:hover {
-  text-decoration: underline;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .favorites-orange {
@@ -101,11 +83,6 @@ button {
   font-size: 14px;
   background-color: orange;
   border: none;
-}
-
-.favorites-orange:hover {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 input {
@@ -137,12 +114,6 @@ form {
   color: #62605c;
   font-size: 11px;
   height: 25px;
-}
-
-.search:hover {
-  background-color: #62605c;
-  color: white;
-  cursor: pointer;
 }
 
 .city-input {
@@ -250,6 +221,37 @@ form {
   border-radius: 5px;
 }
 
+.main-page:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.search:hover {
+  background-color: #62605c;
+  color: white;
+  cursor: pointer;
+}
+
+.favorites:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.main-page-orange:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.favorites-orange:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+img:hover {
+  cursor: pointer;
+  outline: solid orange;
+}
+
 .save-button:hover {
   cursor: pointer;
   background-color: #62605c;
@@ -258,4 +260,27 @@ form {
 #btnMenu:hover {
   cursor: pointer;
   background-color: #62605c;
+}
+
+@media (max-width: 414px) {
+  #root {
+    width: 100%;
+  }
+
+  .app-white {
+    width: 100%;
+  }
+
+  .app {
+    width: 100%;
+  }
+
+  img {
+    width: 100px;
+  }
+
+  .results {
+    font-size: 24px;
+    padding-left: 20px;
+  }
 }
