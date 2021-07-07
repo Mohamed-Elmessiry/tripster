@@ -8,6 +8,9 @@ const App = () => {
   const [imageLinks, setImageLinks] = useState([]);
   const [title, setTitle] = useState('Results');
   const [imageFlag, setImageFlag] = useState(false);
+  const [isFavorites, setFavorites] = useState(false);
+
+  // setFavorites(false);
 
   useEffect(() => {
     if ((window.location.search + '').indexOf('avorit') > 0) {
@@ -55,17 +58,28 @@ const App = () => {
     setImageFlag(false);
     const uri = '/api/user/favorites';
     setTitle('Favorites');
+    alert('favorites');
     fetch(uri).then(res => {
 
       const data = res.json();
+      setFavorites(true);
+      //  alert('favorites');
       return data;
     }).then(venues => {
 
       setVenues(venues);
     });
   };
+  const delFavorite = idx => {
+    const uri = '/api/user/favorites/remove/' + venues[idx].id;
+    alert(uri);
+    fetch(uri).then(res => {
+      favorites();
+    });
+  };
   const mainPageClicked = e => {
     localStorage.removeItem('favorites');
+    setFavorites(false);
     e.preventDefault();
     setVenues([]);
   };
@@ -106,7 +120,10 @@ const App = () => {
                         <h3 className="venue-names">{venue.name}</h3>
                         <p className="venue-category">{venue.pluralName}</p>
                         <p className="venue-address">{venue.address}</p>
-
+                        {isFavorites
+                          ? <button onClick={e => { delFavorite(i); }}>Delete</button>
+                          : <span>not</span>
+                        }
                       </div>
                     </div>
                   );

@@ -123,7 +123,35 @@ app.get('/api/user/favorites', (req, res, next) => {
   });
 
 });
+app.get('/api/favorites', (req, res, next) => {
 
+  connection.query('SELECT * FROM favorites', (qErr, qRes) => {
+    if (qErr) {
+      console.error(qErr);
+      res.status(400).send('error retrieving venue');
+    } else {
+      const data = [];
+      qRes.forEach(row => {
+        data.push(JSON.parse(row.venue_json));
+      });
+      res.send(data);
+    }
+  });
+
+});
+app.get('/api/user/favorites/remove/:id', (req, res, next) => {
+  const id = req.params.id;
+  const query = "DELETE FROM favorites WHERE id = '" + id + "'";
+  connection.query(query, function (err) {
+    if (err) {
+
+      throw new ClientError(400, 'Information not found');
+    } else {
+      res.end('deleted');
+    }
+
+  });
+});
 app.get('/api/get/allposts', (req, res, next) => {
   connection.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
 
@@ -166,8 +194,10 @@ app.get('/api/posts', (req, res, next) => {
 app.get('/api/user/addFavorite/:str', (req, res, next) => {
 
   const str = '{}';
-  const params = ['tester', str];
-  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
+  const obj = JSON.parse(str);
+  const id = obj.id;
+  const params = [id, 'tester', str];
+  connection.query('INSERT INTO favorites (id, username, venue_json) VALUES (?,?,?)', params,
     (qErr, qRes) => {
       if (qErr) {
         console.error(qErr);
@@ -181,10 +211,10 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
 
 app.post('/api/user/addFavorite/', (req, res, next) => {
   const body = req.body;
+  const id = body.id;
   const strBody = JSON.stringify(body);
-
-  const params = ['tester', strBody];
-  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
+  const params = [id, 'tester', strBody];
+  connection.query('INSERT INTO favorites (id, username, venue_json) VALUES (?,?,?)', params, (qErr, qRes) => {
     if (qErr) {
       console.error(qErr);
       res.status(404).send('requested info not found');
