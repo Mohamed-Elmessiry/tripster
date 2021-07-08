@@ -123,7 +123,7 @@ const App = () => {
                         <p className="venue-category">{venue.pluralName}</p>
                         <p className="venue-address">{venue.address}</p>
                         {isFavorites
-                          ? <button onClick={e => { delFavorite(i); }}>Delete</button>
+                          ? <button className='delete-button' onClick={e => { delFavorite(i); }}>Delete</button>
                           : <span></span>
                         }
                       </div>

@@ -262,25 +262,33 @@ img:hover {
   background-color: #62605c;
 }
 
-@media (max-width: 414px) {
-  #root {
-    width: 100%;
-  }
+.delete-button {
+  color: white;
+  background-color: orange;
+  border: none;
+  width: 75px;
+  border-radius: 5px;
 
-  .app-white {
-    width: 100%;
-  }
+  @media (max-width: 414px) {
+    #root {
+      width: 100%;
+    }
 
-  .app {
-    width: 100%;
-  }
+    .app-white {
+      width: 100%;
+    }
 
-  img {
-    width: 100px;
-  }
+    .app {
+      width: 100%;
+    }
 
-  .results {
-    font-size: 24px;
-    padding-left: 20px;
+    img {
+      width: 100px;
+    }
+
+    .results {
+      font-size: 24px;
+      padding-left: 20px;
+    }
   }
 }
