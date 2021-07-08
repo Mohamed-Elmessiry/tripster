@@ -9,6 +9,7 @@ const path = require('path');
 const mysql = require('mysql2');
 
 const app = express();
+
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'tripster',
