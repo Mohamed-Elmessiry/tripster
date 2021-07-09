@@ -77,7 +77,7 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   } else {
 
     fetch(
-    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=2`
+    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=4`
     )
       .then(data => data.json())
       .then(json => {
