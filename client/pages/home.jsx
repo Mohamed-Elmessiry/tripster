@@ -12,11 +12,10 @@ const App = () => {
 
   useEffect(() => {
 
-    const f = localStorage.getItem('favorites');
-    if ((window.location.search + '').indexOf('avorit') > 0 || f === 'true') {
+    const fav = localStorage.getItem('favorites');
+    if (fav === 'true') {
       setFavorites(true);
-    } else {
-      setFavorites(false);
+      favorites();
     }
     if (imageFlag) { getImages(); }
   }, [venues]);
@@ -57,6 +56,7 @@ const App = () => {
     console.error();
   };
   const favorites = e => {
+
     setFavorites(true);
 
     setImageFlag(false);
@@ -69,23 +69,22 @@ const App = () => {
       return data;
     }).then(venues => {
       setFavorites(true);
-      localStorage.setItem('favorites', 'true');
+      localStorage.setItem('favorites', 'false');
       setVenues(venues);
-
     });
   };
   const delFavorite = idx => {
     const uri = '/api/user/favorites/remove/' + venues[idx].id;
-    fetch(uri).then(res => {
+    fetch(uri, { method: 'DELETE' }).then(res => {
       favorites();
     });
   };
   const mainPageClicked = e => {
     localStorage.removeItem('favorites');
-    setFavorites(false);
-    e.preventDefault();
+
     window.location.replace('/');
   };
+
   return (
     <div className={venues.length > 0 ? 'app-white' : 'app'}>
       <div className={venues.length > 0 ? 'header-orange' : 'header'}>

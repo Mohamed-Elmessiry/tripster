@@ -140,13 +140,12 @@ app.get('/api/favorites', (req, res, next) => {
   });
 
 });
-app.get('/api/user/favorites/remove/:id', (req, res, next) => {
+app.delete('/api/user/favorites/remove/:id', (req, res, next) => {
   const id = req.params.id;
   const query = "DELETE FROM favorites WHERE id = '" + id + "'";
   connection.query(query, function (err) {
     if (err) {
-
-      throw new ClientError(400, 'Information not found');
+      res.status(400).send('Information not found');
     } else {
       res.end('deleted');
     }
