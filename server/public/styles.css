@@ -159,6 +159,7 @@ form {
 
 .single-view-section {
   margin-top: 7px;
+  margin-left: 0;
 }
 
 .single-view-img {
@@ -286,12 +287,12 @@ img:hover {
   }
 
   img {
-    width: 100px;
+    object-fit: fill;
   }
 
   .results {
     font-size: 24px;
-    margin: 20px;
+    margin-top: 20px;
   }
 
   section {
