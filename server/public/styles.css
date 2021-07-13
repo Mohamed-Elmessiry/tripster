@@ -3,11 +3,6 @@
   height: 1440px;
 }
 
-.app-white {
-  background-color: white;
-  height: 1440px;
-}
-
 section {
   display: flex;
   flex-flow: row wrap;
@@ -270,6 +265,11 @@ img:hover {
   border: none;
   width: 75px;
   border-radius: 5px;
+}
+
+.delete-button:hover {
+  cursor: pointer;
+  background-color: #62605c;
 }
 
 @media (max-width: 414px) {
