@@ -274,18 +274,6 @@ img:hover {
 }
 
 @media (max-width: 414px) {
-  #root {
-    width: 100%;
-  }
-
-  .app-white {
-    width: 100%;
-  }
-
-  .app {
-    width: 100%;
-  }
-
   img {
     object-fit: fill;
   }
@@ -293,13 +281,6 @@ img:hover {
   .results {
     font-size: 24px;
     margin-top: 20px;
-  }
-
-  section {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
   }
 
   .venue-card {
