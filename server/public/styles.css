@@ -7,10 +7,6 @@ section {
   display: flex;
   flex-flow: row wrap;
   flex-direction: row;
-
-  /* justify-content: space-evenly; */
-
-  /* align-items: center; */
   margin-left: 20px;
 }
 
@@ -55,8 +51,6 @@ button {
   background-color: #62605c;
   border: none;
   padding-right: 50px;
-
-  /* text-decoration: none; */
 }
 
 .favorites {
@@ -74,8 +68,6 @@ button {
   background-color: orange;
   border: none;
   padding-right: 50px;
-
-  /* text-decoration: none; */
 }
 
 .favorites-orange {
@@ -92,8 +84,6 @@ input {
 
 form {
   display: flex;
-
-  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
 }
@@ -175,8 +165,6 @@ form {
 
 .single-view-image-holder {
   width: 100%;
-
-  /* text-align: center; */
 }
 
 .venue-names-single {
@@ -294,8 +282,6 @@ img:hover {
 
   .venue-card {
     width: 100%;
-
-    /* padding-top: 20px; */
   }
 
   .venue-names {
