@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Venue = () => {
   const venue = JSON.parse(localStorage.getItem('venue'));
@@ -23,7 +22,16 @@ const Venue = () => {
     fetch('/api/user/addFavorite/', requestOptions).then(res => {
     });
   };
+  const goFavorites = e => {
+    localStorage.setItem('favorites', 'true');
+    window.location.replace('/');
+  };
+  const goMainMenu = e => {
+    localStorage.removeItem('favorites');
+    window.location.replace('/');
+  };
   const onMenu = e => {
+    localStorage.removeItem('favorites');
     window.open(venue.menuUrl);
   };
 
@@ -31,8 +39,9 @@ const Venue = () => {
     <div className={venue ? 'app-white' : 'app'}>
       <div className={venue ? 'header-orange' : 'header'}>
         <div className="buttons-holder">
-          <Link to={'/'} className={!venue ? 'main-page' : 'main-page-orange'} >Main Page</Link>
-          <Link to={'/?favorites=true'} className={!venue ? 'main-page' : 'main-page-orange'} >Favorites</Link>
+
+          <button onClick={goMainMenu} className={!venue ? 'main-page' : 'main-page-orange'} >Main Page</button>
+          <button onClick={goFavorites} className={!venue ? 'main-page' : 'main-page-orange'} >Favorites</button>
 
         </div>
         <section className='single-view-section'>

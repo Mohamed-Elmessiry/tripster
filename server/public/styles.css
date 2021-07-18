@@ -3,16 +3,11 @@
   height: 1440px;
 }
 
-.app-white {
-  background-color: white;
-  height: 1440px;
-}
-
 section {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  flex-flow: row wrap;
+  flex-direction: row;
+  margin-left: 20px;
 }
 
 .hidden {
@@ -56,7 +51,6 @@ button {
   background-color: #62605c;
   border: none;
   padding-right: 50px;
-  text-decoration: none;
 }
 
 .favorites {
@@ -74,7 +68,6 @@ button {
   background-color: orange;
   border: none;
   padding-right: 50px;
-  text-decoration: none;
 }
 
 .favorites-orange {
@@ -91,15 +84,14 @@ input {
 
 form {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
 .venue-card {
   display: flex;
-  width: 90%;
-  padding-top: 20px;
+  width: calc(100% / 2);
+  padding: 20px;
 }
 
 .venue-text {
@@ -137,7 +129,6 @@ form {
 .venue-names {
   font-family: galada, sans-serif;
   color: black;
-  margin-top: 0;
   padding-top: 0;
 }
 
@@ -156,12 +147,13 @@ form {
 .results {
   color: #9f9d9d;
   font-family: Anton, sans-serif;
-  padding-left: 10px;
+  padding-left: 35px;
   padding-bottom: 20px;
 }
 
 .single-view-section {
   margin-top: 7px;
+  margin-left: 0;
 }
 
 .single-view-img {
@@ -171,7 +163,6 @@ form {
 
 .single-view-image-holder {
   width: 100%;
-  text-align: center;
 }
 
 .venue-names-single {
@@ -204,13 +195,14 @@ form {
   border: none;
   width: 75px;
   border-radius: 5px;
+  margin-right: 20px;
 }
 
 .bottomButtons {
   padding-top: 75px;
-  width: 60%;
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 #btnMenu {
@@ -262,25 +254,35 @@ img:hover {
   background-color: #62605c;
 }
 
+.delete-button {
+  color: white;
+  background-color: orange;
+  border: none;
+  width: 75px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  cursor: pointer;
+  background-color: #62605c;
+}
+
 @media (max-width: 414px) {
-  #root {
-    width: 100%;
-  }
-
-  .app-white {
-    width: 100%;
-  }
-
-  .app {
-    width: 100%;
-  }
-
   img {
-    width: 100px;
+    object-fit: fill;
   }
 
   .results {
     font-size: 24px;
-    padding-left: 20px;
+    margin-top: 20px;
+  }
+
+  .venue-card {
+    width: 100%;
+  }
+
+  .venue-names {
+    margin-top: 0;
   }
 }

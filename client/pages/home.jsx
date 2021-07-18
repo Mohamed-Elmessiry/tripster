@@ -8,9 +8,13 @@ const App = () => {
   const [imageLinks, setImageLinks] = useState([]);
   const [title, setTitle] = useState('Results');
   const [imageFlag, setImageFlag] = useState(false);
+  const [isFavorites, setFavorites] = useState(false);
 
   useEffect(() => {
-    if ((window.location.search + '').indexOf('avorit') > 0) {
+
+    const fav = localStorage.getItem('favorites');
+    if (fav === 'true') {
+      setFavorites(true);
       favorites();
     }
     if (imageFlag) { getImages(); }
@@ -52,22 +56,33 @@ const App = () => {
     console.error();
   };
   const favorites = e => {
+
+    setFavorites(true);
+
     setImageFlag(false);
     const uri = '/api/user/favorites';
     setTitle('Favorites');
     fetch(uri).then(res => {
 
       const data = res.json();
+
       return data;
     }).then(venues => {
-
+      setFavorites(true);
+      localStorage.setItem('favorites', 'false');
       setVenues(venues);
+    });
+  };
+  const delFavorite = idx => {
+    const uri = '/api/user/favorites/remove/' + venues[idx].id;
+    fetch(uri, { method: 'DELETE' }).then(res => {
+      favorites();
     });
   };
   const mainPageClicked = e => {
     localStorage.removeItem('favorites');
-    e.preventDefault();
-    setVenues([]);
+
+    window.location.replace('/');
   };
 
   return (
@@ -106,7 +121,10 @@ const App = () => {
                         <h3 className="venue-names">{venue.name}</h3>
                         <p className="venue-category">{venue.pluralName}</p>
                         <p className="venue-address">{venue.address}</p>
-
+                        {isFavorites
+                          ? <button className='delete-button' onClick={e => { delFavorite(i); }}>Delete</button>
+                          : <span></span>
+                        }
                       </div>
                     </div>
                   );

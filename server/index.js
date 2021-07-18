@@ -9,13 +9,31 @@ const path = require('path');
 const mysql = require('mysql2');
 
 const app = express();
-const connection = mysql.createConnection({
+// eslint-disable-next-line no-unused-vars
+const MYSQL_LOCAL = {
   host: 'localhost',
   user: 'tripster',
   password: 'Trip1234',
   database: 'tripster',
   port: '8889'
-});
+};
+
+/*
+pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+i6slljw9x5bujmhy
+
+pscgtrjjye2ow2v3
+
+*/
+
+const MYSQL_HEROKU = {
+  host: 'pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  user: 'i6slljw9x5bujmhy',
+  password: 'wbguffhcey2e87qo',
+  database: 'pscgtrjjye2ow2v3',
+  port: '8889'
+};
+const connection = mysql.createConnection(MYSQL_HEROKU);
 
 const formatData = json => {
   return json.response.venues
@@ -76,7 +94,7 @@ app.get('/api/venues/:city/:search', (req, res, next) => {
   } else {
 
     fetch(
-    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=2`
+    `https://api.foursquare.com/v2/venues/search?client_id=${process.env.clientId}&client_secret=${process.env.clientSecret}&v=20210514&near=${cityname}&intent=browse&radius=10000&query=${searchQuery}&limit=4`
     )
       .then(data => data.json())
       .then(json => {
@@ -123,7 +141,34 @@ app.get('/api/user/favorites', (req, res, next) => {
   });
 
 });
+app.get('/api/favorites', (req, res, next) => {
 
+  connection.query('SELECT * FROM favorites', (qErr, qRes) => {
+    if (qErr) {
+      console.error(qErr);
+      res.status(400).send('error retrieving venue');
+    } else {
+      const data = [];
+      qRes.forEach(row => {
+        data.push(JSON.parse(row.venue_json));
+      });
+      res.send(data);
+    }
+  });
+
+});
+app.delete('/api/user/favorites/remove/:id', (req, res, next) => {
+  const id = req.params.id;
+  const query = "DELETE FROM favorites WHERE id = '" + id + "'";
+  connection.query(query, function (err) {
+    if (err) {
+      res.status(400).send('Information not found');
+    } else {
+      res.end('deleted');
+    }
+
+  });
+});
 app.get('/api/get/allposts', (req, res, next) => {
   connection.query('SELECT * FROM posts ORDER BY date_created DESC', (qErr, qRes) => {
 
@@ -166,8 +211,10 @@ app.get('/api/posts', (req, res, next) => {
 app.get('/api/user/addFavorite/:str', (req, res, next) => {
 
   const str = '{}';
-  const params = ['tester', str];
-  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params,
+  const obj = JSON.parse(str);
+  const id = obj.id;
+  const params = [id, 'tester', str];
+  connection.query('INSERT INTO favorites (id, username, venue_json) VALUES (?,?,?)', params,
     (qErr, qRes) => {
       if (qErr) {
         console.error(qErr);
@@ -181,10 +228,10 @@ app.get('/api/user/addFavorite/:str', (req, res, next) => {
 
 app.post('/api/user/addFavorite/', (req, res, next) => {
   const body = req.body;
+  const id = body.id;
   const strBody = JSON.stringify(body);
-
-  const params = ['tester', strBody];
-  connection.query('INSERT INTO favorites (username, venue_json) VALUES (?,?)', params, (qErr, qRes) => {
+  const params = [id, 'tester', strBody];
+  connection.query('INSERT INTO favorites (id, username, venue_json) VALUES (?,?,?)', params, (qErr, qRes) => {
     if (qErr) {
       console.error(qErr);
       res.status(404).send('requested info not found');
