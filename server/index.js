@@ -30,8 +30,7 @@ const MYSQL_HEROKU = {
   host: 'pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
   user: 'i6slljw9x5bujmhy',
   password: 'wbguffhcey2e87qo',
-  database: 'pscgtrjjye2ow2v3',
-  port: '8889'
+  database: 'pscgtrjjye2ow2v3'
 };
 const connection = mysql.createConnection(MYSQL_HEROKU);
 
@@ -60,6 +59,9 @@ const formatData = json => {
 };
 app.use(bodyParser.json());
 app.use(staticMiddleware);
+app.get('/test', (req, res, next) => {
+  res.end('test 2021-07-18b');
+});
 app.get('/api/venue/image/:id?', (req, res, next) => {
   const id = req.params.id;
 
