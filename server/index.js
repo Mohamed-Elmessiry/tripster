@@ -9,14 +9,31 @@ const path = require('path');
 const mysql = require('mysql2');
 
 const app = express();
-
-const connection = mysql.createConnection({
+// eslint-disable-next-line no-unused-vars
+const MYSQL_LOCAL = {
   host: 'localhost',
   user: 'tripster',
   password: 'Trip1234',
   database: 'tripster',
   port: '8889'
-});
+};
+
+/*
+pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+i6slljw9x5bujmhy
+
+pscgtrjjye2ow2v3
+
+*/
+
+const MYSQL_HEROKU = {
+  host: 'pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  user: 'i6slljw9x5bujmhy',
+  password: 'wbguffhcey2e87qo',
+  database: 'pscgtrjjye2ow2v3',
+  port: '8889'
+};
+const connection = mysql.createConnection(MYSQL_HEROKU);
 
 const formatData = json => {
   return json.response.venues
